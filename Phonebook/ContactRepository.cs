@@ -30,9 +30,14 @@ public class ContactRepository
         try
         {
             Init();
-            if (contact is null)
+            if (contact != null)
             {
-                throw new Exception("Valid contact details required");
+                List<PersonContact> contacts = GetAllContacts();
+                var checkPhone = contacts.FirstOrDefault(c => c.PhoneNumber.Equals(contact.PhoneNumber));
+                if (checkPhone != null)
+                {
+                    Shell.Current.DisplayAlert("Error", "Contact Already added", "OK");
+                }
             }
             result = conn.Insert(contact);
             Shell.Current.GoToAsync("..");
@@ -49,8 +54,11 @@ public class ContactRepository
         {
             Init();
             List<PersonContact> contacts = conn.Table<PersonContact>().ToList();
-           
-            return contacts.Where(x => !string.IsNullOrEmpty(x.FirstName)).OrderBy(x => x.FirstName[0]).ToList();
+            // List<PersonContact> contactsToDelete = contacts.Where(x=>string.IsNullOrEmpty(x.FirstName)).ToList();
+            // foreach(PersonContact c in contactsToDelete){
+            //     conn.Delete(c);
+            // }
+            return contacts.OrderBy(x => x.FirstName[0]).ToList();
         }
         catch (Exception ex)
         {
@@ -91,5 +99,33 @@ public class ContactRepository
         conn.Delete(contact);
     }
 
+    public List<PersonContact> SearchContacts(string filter)
+    {
+        List<PersonContact> contacts = GetAllContacts();
+        var filteredContacts = contacts.Where(c => !string.IsNullOrWhiteSpace(c.FirstName) && c.FirstName.ToLower().Contains(filter.ToLower())).ToList();
+
+        if (filteredContacts == null || filteredContacts.Count <= 0)
+        {
+            filteredContacts = contacts.Where(c => !string.IsNullOrWhiteSpace(c.LastName) && c.LastName.ToLower().Contains(filter.ToLower())).ToList();
+        }
+        else return filteredContacts;
+
+        if (filteredContacts == null || filteredContacts.Count <= 0)
+        {
+            filteredContacts = contacts.Where(c => !string.IsNullOrWhiteSpace(c.Email) && c.Email.ToLower().Contains(filter.ToLower())).ToList();
+        }
+        else return filteredContacts;
+
+
+        if (filteredContacts == null || filteredContacts.Count <= 0)
+        {
+            filteredContacts = contacts.Where(c => c.PhoneNumber.Equals(filter)).ToList();
+        }
+        else return filteredContacts;
+
+        return filteredContacts;
+
+
+    }
 
 }

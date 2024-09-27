@@ -10,8 +10,6 @@
              RowDefinitions="*,*"
              Margin="10,10,10,0">
               <VerticalStackLayout Spacing="10">
-
-
                      <HorizontalStackLayout Padding="10,2,10,2">
                             <Label Text="First Name"
                                    WidthRequest="120"

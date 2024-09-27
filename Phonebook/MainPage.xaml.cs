@@ -33,6 +33,11 @@ public partial class MainPage : ContentPage
 	{
 		contactList.SelectedItem = null;
 	}
+
+	private async void searchBar_TextChanged(object sender, TextChangedEventArgs e){
+		List<PersonContact> contacts = App.ContactRepo.SearchContacts(searchBar.Text);
+		contactList.ItemsSource = contacts;
+	}
 	// public async void OnGetButtonClicked(object sender, EventArgs args)
 	// {
 
