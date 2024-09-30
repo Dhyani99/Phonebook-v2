@@ -25,5 +25,5 @@ public class PersonContact
     [MaxLength(10)]
     public string PhoneNumber{get; set;}
 
-   
+    public bool IsFavorite{get; set;}
 }

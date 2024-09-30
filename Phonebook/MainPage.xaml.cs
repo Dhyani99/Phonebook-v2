@@ -12,8 +12,10 @@ public partial class MainPage : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		List<PersonContact> contacts = App.ContactRepo.GetAllContacts();
-		contactList.ItemsSource = contacts;
+		List<ContactGroup> groupedContacts = App.ContactRepo.GetAllContacts();
+		// var favorites = contacts.Where(c => c.IsFavorite).ToList();
+        // var nonFavorites = contacts.Where(c => !c.IsFavorite).ToList();
+		contactList.ItemsSource = groupedContacts;
 	}
 
 	public async void OnCreateContactButtonClicked(object sender, EventArgs args)
@@ -35,14 +37,20 @@ public partial class MainPage : ContentPage
 	}
 
 	private async void searchBar_TextChanged(object sender, TextChangedEventArgs e){
-		List<PersonContact> contacts = App.ContactRepo.SearchContacts(searchBar.Text);
-		contactList.ItemsSource = contacts;
+		List<ContactGroup> groupedContacts = App.ContactRepo.SearchContacts(searchBar.Text);
+		contactList.ItemsSource = groupedContacts;
 	}
-	// public async void OnGetButtonClicked(object sender, EventArgs args)
-	// {
 
-	// 	List<PersonContact> contacts = await App.ContactRepo.GetAllContacts();
-	// 	contactList.ItemsSource = contacts;
-	// }
+	private async void OnFavoriteSwipeItemInvoked(object sender, EventArgs e){
+		var swipeItem = sender as SwipeItem;
+    	var contact = swipeItem?.BindingContext as PersonContact;
+		if(contact!=null){
+			contact.IsFavorite = !contact.IsFavorite;
+			App.ContactRepo.UpdateContact(contact.Id, contact);
+		}
+		List<ContactGroup> groupedContacts = App.ContactRepo.GetAllContacts();
+		contactList.ItemsSource = groupedContacts;
+	}
+	
 }
 

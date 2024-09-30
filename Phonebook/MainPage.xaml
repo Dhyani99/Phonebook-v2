@@ -16,14 +16,37 @@
                    TextChanged="searchBar_TextChanged"/>
         <ScrollView Grid.Row="1">
             <ListView x:Name="contactList"
+                      IsGroupingEnabled="True"
+                      GroupDisplayBinding="{Binding Title}"
                       BackgroundColor="Transparent"
                       ItemSelected="contacts_itemSelected"
                       ItemTapped="contacts_itemTapped"
                       RowHeight="70">
+
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Label Text="{Binding Title}"
+                                   FontSize="Medium"
+                                   FontAttributes="Bold"
+                                   Padding="10"
+                                   TextColor="Black"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <ViewCell.View>
+                            <!-- <ViewCell.View> -->
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems Mode="Reveal">
+                                        <SwipeItem Text="Favorite"
+                                                   x:Name="FavItem"
+                                                   BackgroundColor="Orange"
+                                                   Invoked="OnFavoriteSwipeItemInvoked"/>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
 
                                 <Grid HeightRequest="80"
                                       ColumnDefinitions="70,Auto">
@@ -42,10 +65,10 @@
                                         <Label VerticalOptions="Center">
                                             <Label.FormattedText>
                                                 <FormattedString>
-                                                    <Span FontSize="14"
+                                                    <Span FontSize="{OnPlatform Android={OnIdiom Phone=16, Tablet=18}, iOS={OnIdiom Phone=16, Tablet=18}, MacCatalyst=18, WinUI={OnIdiom Phone=18, Tablet=20, Desktop=20}}"
                                                           Text="{Binding FirstName}"/>
                                                     <Span Text=" "/>
-                                                    <Span FontSize="14"
+                                                    <Span FontSize="{OnPlatform Android={OnIdiom Phone=16, Tablet=18}, iOS={OnIdiom Phone=16, Tablet=18}, MacCatalyst=18, WinUI={OnIdiom Phone=18, Tablet=20, Desktop=20}}"
                                                           Text="{Binding LastName}"/>
                                                 </FormattedString>
                                             </Label.FormattedText>
@@ -55,14 +78,13 @@
                                                Grid.Column="1"
                                                Text="{Binding PhoneNumber}"
                                                TextColor="Crimson"
-                                               FontSize="12"/>
+                                               FontSize="{OnPlatform Android={OnIdiom Phone=12, Tablet=14}, iOS={OnIdiom Phone=12, Tablet=14}, MacCatalyst=14, WinUI={OnIdiom Phone=12, Tablet=12, Desktop=12}}"/>
                                     </Grid>
 
                                 </Grid>
-                            </ViewCell.View>
+                                <!-- </ViewCell.View> -->
 
-
-
+                            </SwipeView>
                         </ViewCell>
 
                     </DataTemplate>

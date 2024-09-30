@@ -16,6 +16,7 @@ public class ContactRepository
             return;
         }
         conn = new SQLiteConnection(_dbPath);
+        //      conn.DropTable<PersonContact>();
         conn.CreateTable<PersonContact>();
     }
 
@@ -32,13 +33,16 @@ public class ContactRepository
             Init();
             if (contact != null)
             {
-                List<PersonContact> contacts = GetAllContacts();
+                List<PersonContact> contacts = GetAllContacts().SelectMany(g => g).ToList();
                 var checkPhone = contacts.FirstOrDefault(c => c.PhoneNumber.Equals(contact.PhoneNumber));
                 if (checkPhone != null)
                 {
                     Shell.Current.DisplayAlert("Error", "Contact Already added", "OK");
+                    return;
                 }
+                contact.IsFavorite = false;
             }
+
             result = conn.Insert(contact);
             Shell.Current.GoToAsync("..");
         }
@@ -48,7 +52,7 @@ public class ContactRepository
         }
     }
 
-    public List<PersonContact> GetAllContacts()
+    public List<ContactGroup> GetAllContacts()
     {
         try
         {
@@ -58,19 +62,35 @@ public class ContactRepository
             // foreach(PersonContact c in contactsToDelete){
             //     conn.Delete(c);
             // }
-            return contacts.OrderBy(x => x.FirstName[0]).ToList();
+            var favorites = contacts.Where(c => c.IsFavorite).OrderBy(c => c.FirstName).ToList();
+            var nonFavorites = contacts.Where(c => !c.IsFavorite).OrderBy(c => c.FirstName).ToList();
+
+            List<ContactGroup> contactGroups = new List<ContactGroup>();
+
+            if (favorites.Any())
+            {
+                contactGroups.Add(new ContactGroup("Favorites", favorites));
+            }
+            if (nonFavorites.Any())
+            {
+                contactGroups.Add(new ContactGroup("All Contacts", nonFavorites));
+            }
+
+            return contactGroups;
+
         }
         catch (Exception ex)
         {
             Shell.Current.DisplayAlert("Error!", $"Unable to get contacts: {ex.Message}", "OK");
         }
 
-        return new List<PersonContact>();
+        return new List<ContactGroup>();
     }
 
     public PersonContact GetContactById(int id)
     {
-        List<PersonContact> contacts = GetAllContacts();
+        Init();
+        List<PersonContact> contacts = conn.Table<PersonContact>().ToList();
         return contacts.FirstOrDefault(contact => contact.Id == id);
     }
 
@@ -89,8 +109,9 @@ public class ContactRepository
             contactToUpdate.Company = contact.Company;
             contactToUpdate.Email = contact.Email;
             contactToUpdate.PhoneNumber = contact.PhoneNumber;
+            contactToUpdate.IsFavorite = contact.IsFavorite;
+            conn.Update(contactToUpdate);
         }
-        conn.Update(contactToUpdate);
 
     }
     public void DeleteContact(int id)
@@ -99,32 +120,41 @@ public class ContactRepository
         conn.Delete(contact);
     }
 
-    public List<PersonContact> SearchContacts(string filter)
+    public List<ContactGroup> SearchContacts(string filter)
     {
-        List<PersonContact> contacts = GetAllContacts();
+        List<PersonContact> contacts = GetAllContacts().SelectMany(g => g).ToList();
         var filteredContacts = contacts.Where(c => !string.IsNullOrWhiteSpace(c.FirstName) && c.FirstName.ToLower().Contains(filter.ToLower())).ToList();
 
         if (filteredContacts == null || filteredContacts.Count <= 0)
         {
             filteredContacts = contacts.Where(c => !string.IsNullOrWhiteSpace(c.LastName) && c.LastName.ToLower().Contains(filter.ToLower())).ToList();
         }
-        else return filteredContacts;
 
         if (filteredContacts == null || filteredContacts.Count <= 0)
         {
             filteredContacts = contacts.Where(c => !string.IsNullOrWhiteSpace(c.Email) && c.Email.ToLower().Contains(filter.ToLower())).ToList();
         }
-        else return filteredContacts;
-
 
         if (filteredContacts == null || filteredContacts.Count <= 0)
         {
-            filteredContacts = contacts.Where(c => c.PhoneNumber.Equals(filter)).ToList();
+            filteredContacts = contacts.Where(c => c.PhoneNumber.Contains(filter)).ToList();
         }
-        else return filteredContacts;
 
-        return filteredContacts;
+        var favorites = filteredContacts.Where(c => c.IsFavorite).OrderBy(c => c.FirstName).ToList();
+        var nonFavorites = filteredContacts.Where(c => !c.IsFavorite).OrderBy(c => c.FirstName).ToList();
 
+        List<ContactGroup> filteredGroups = new List<ContactGroup>();
+        if (favorites.Any())
+        {
+            filteredGroups.Add(new ContactGroup("Favorites", favorites));
+        }
+
+        if (nonFavorites.Any())
+        {
+            filteredGroups.Add(new ContactGroup("All Contacts", nonFavorites));
+        }
+
+        return filteredGroups;
 
     }
 
