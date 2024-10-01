@@ -99,13 +99,13 @@
 
                      <HorizontalStackLayout Spacing="10"
                                             Padding="10,2,10,2">
-                            <Button Text="Add Contact"
+                            <Button Text="Save"
                                     Grid.Row="1"
-                                    Clicked="OnAddButtonClicked"/>
+                                    Clicked="OnSaveButtonClicked"/>
 
-                            <Button Text="Cancel"
+                            <Button Text="Clear"
                                     Grid.Row="1"
-                                    Clicked="OnCancelButtonClicked"/>
+                                    Clicked="OnClearButtonClicked"/>
 
                      </HorizontalStackLayout>
               </VerticalStackLayout>

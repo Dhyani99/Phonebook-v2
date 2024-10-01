@@ -30,7 +30,8 @@
                                    FontSize="Medium"
                                    FontAttributes="Bold"
                                    Padding="10"
-                                   TextColor="Black"/>
+                                   TextColor="{OnPlatform Android={OnIdiom Phone=Black, Tablet=Black}, iOS={OnIdiom Phone=Black, Tablet=Black}, MacCatalyst=White}"
+                                   />
                         </ViewCell>
                     </DataTemplate>
                 </ListView.GroupHeaderTemplate>
@@ -94,7 +95,7 @@
 
 
         <Button Text="Create Contact"
-                Grid.Row="2"
+                Grid.Row="2" 
                 Clicked="OnCreateContactButtonClicked"/>
     </Grid>
 

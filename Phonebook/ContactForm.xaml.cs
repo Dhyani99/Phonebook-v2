@@ -9,7 +9,7 @@ public partial class ContactForm : ContentPage
 		InitializeComponent();
 	}
 
-	public void OnAddButtonClicked(object sender, EventArgs args)
+	public void OnSaveButtonClicked(object sender, EventArgs args)
 	{
 		if (nameValidator.IsNotValid)
 		{
@@ -41,11 +41,16 @@ public partial class ContactForm : ContentPage
 		App.ContactRepo.AddNewContact(contact);
 	}
 
-	public async void OnCancelButtonClicked(object sender, EventArgs args)
+	public void OnClearButtonClicked(object sender, EventArgs args)
 	{
-		await Shell.Current.GoToAsync("..");
-	}
+		fn.Text=string.Empty;
+		ln.Text= string.Empty;
+		email.Text = string.Empty;
+		phoneNumber.Text = string.Empty;
+		companyName.Text = string.Empty;
 
+
+	}
 
 
 

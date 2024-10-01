@@ -48,8 +48,10 @@ public partial class MainPage : ContentPage
 			contact.IsFavorite = !contact.IsFavorite;
 			App.ContactRepo.UpdateContact(contact.Id, contact);
 		}
+
 		List<ContactGroup> groupedContacts = App.ContactRepo.GetAllContacts();
 		contactList.ItemsSource = groupedContacts;
+		OnAppearing();
 	}
 	
 }
