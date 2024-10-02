@@ -64,11 +64,5 @@ public partial class EditContactPage : ContentPage
 		Shell.Current.GoToAsync("..");
 	}
 
-	public async void OnDeleteButtonClicked(object sender, EventArgs args){
-		bool answer = await Shell.Current.DisplayAlert("Delete contact","Are you sure you want to delete the contact?", "OK", "Cancel");
-		if(answer){
-			App.ContactRepo.DeleteContact(contact.Id);
-			await Shell.Current.GoToAsync("..");
-		}
-	}
+
 }

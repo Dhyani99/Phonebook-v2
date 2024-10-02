@@ -62,6 +62,12 @@ public class ContactRepository
             // foreach(PersonContact c in contactsToDelete){
             //     conn.Delete(c);
             // }
+
+            // var contactGroups = contacts
+            //                     .GroupBy(c => c.IsFavorite ? "Favorites" : "Contacts")
+            //                     .Select(g => new ContactGroup(g.Key, g.ToList()))
+            //                     .ToList();
+
             var favorites = contacts.Where(c => c.IsFavorite).OrderBy(c => c.FirstName).ToList();
             var nonFavorites = contacts.Where(c => !c.IsFavorite).OrderBy(c => c.FirstName).ToList();
 

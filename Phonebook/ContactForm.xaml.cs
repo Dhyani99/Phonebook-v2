@@ -49,7 +49,6 @@ public partial class ContactForm : ContentPage
 		phoneNumber.Text = string.Empty;
 		companyName.Text = string.Empty;
 
-
 	}
 
 

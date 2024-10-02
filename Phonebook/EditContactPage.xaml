@@ -4,110 +4,86 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Phonebook.EditContactPage"
              Title="Edit Contact">
-       <Grid Padding="5"
-             RowSpacing="5"
-             ColumnSpacing="2"
-             RowDefinitions="*,*"
-             Margin="10,10,10,0">
-              <VerticalStackLayout Spacing="10">
-                     <HorizontalStackLayout Padding="10,2,10,2">
-                            <Label Text="First Name"
-                                   WidthRequest="120"
-                                   VerticalOptions="Center"/>
-                            <Entry x:Name="fn"
-                                   MinimumWidthRequest="200"
-                                   Placeholder="Enter first name">
-                                   <Entry.Behaviors>
-                                          <toolkit:TextValidationBehavior
-                                                 x:Name="nameValidator"
-                                                 MinimumLength="1"
-                                                 Flags="ValidateOnAttaching, ValidateOnValueChanged"/>
-                                   </Entry.Behaviors>
-                            </Entry>
-                     </HorizontalStackLayout>
+       <Grid  Margin="35,35,35,35"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+              RowSpacing="10">
+
+              <Entry x:Name="fn"
+                     Grid.Row="0"
+                     Placeholder="Enter first name">
+                     <Entry.Behaviors>
+                            <toolkit:TextValidationBehavior
+                                   x:Name="nameValidator"
+                                   MinimumLength="1"
+                                   Flags="ValidateOnAttaching, ValidateOnValueChanged"/>
+                     </Entry.Behaviors>
+              </Entry>
+
+              <Entry x:Name="ln"
+                     Grid.Row="1"
+                     Placeholder="Enter last name"/>
 
 
-                     <HorizontalStackLayout Padding="10,2,10,2">
-                            <Label Text="Last Name"
-                                   WidthRequest="120"
-                                   VerticalOptions="Center"/>
-                            <Entry x:Name="ln"
-                                   MinimumWidthRequest="200"
-                                   Placeholder="Enter last name"/>
-                     </HorizontalStackLayout>
+
+              <Entry x:Name="email"
+                     Grid.Row="2"
+                     Placeholder="Enter email">
+                     <Entry.Behaviors>
+                            <toolkit:MultiValidationBehavior
+                                   x:Name="emailValidator"
+                                   Flags="ValidateOnAttaching, ValidateOnValueChanged">
+                                   <toolkit:TextValidationBehavior
+                                          MinimumLength="1"
+                                          Flags="ValidateOnAttaching, ValidateOnValueChanged"
+                                          toolkit:MultiValidationBehavior.Error="Email is required."/>
+                                   <toolkit:EmailValidationBehavior
+                                          toolkit:MultiValidationBehavior.Error="Email format is invalid."
+                                          Flags="ValidateOnAttaching, ValidateOnValueChanged"/>
+                            </toolkit:MultiValidationBehavior>
+                     </Entry.Behaviors>
+              </Entry>
 
 
-                     <HorizontalStackLayout Padding="10,2,10,2">
-                            <Label Text="Email"
-                                   WidthRequest="120"
-                                   VerticalOptions="Center"/>
-                            <Entry x:Name="email"
-                                   MinimumWidthRequest="200"
-                                   Placeholder="Enter email">
-                                   <Entry.Behaviors>
-                                          <toolkit:MultiValidationBehavior
-                                                 x:Name="emailValidator"
-                                                 Flags="ValidateOnAttaching, ValidateOnValueChanged">
-                                                 <toolkit:TextValidationBehavior
-                                                        MinimumLength="1"
-                                                        Flags="ValidateOnAttaching, ValidateOnValueChanged"
-                                                        toolkit:MultiValidationBehavior.Error="Email is required."/>
-                                                 <toolkit:EmailValidationBehavior
-                                                        toolkit:MultiValidationBehavior.Error="Email format is invalid."
-                                                        Flags="ValidateOnAttaching, ValidateOnValueChanged"/>
-                                          </toolkit:MultiValidationBehavior>
-                                   </Entry.Behaviors>
-                            </Entry>
-                     </HorizontalStackLayout>
 
-                     <HorizontalStackLayout Padding="10,2,10,2">
-                            <Label Text="Company Name"
-                                   WidthRequest="120"
-                                   VerticalOptions="Center"/>
-                            <Entry x:Name="companyName"
-                                   MinimumWidthRequest="200"
-                                   Placeholder="Enter company name"/>
-                     </HorizontalStackLayout>
+              <Entry x:Name="companyName"
+                     Grid.Row="3"
+                     Placeholder="Enter company name"/>
 
-                     <HorizontalStackLayout Padding="10,2,10,2">
-                            <Label Text="Phone Number"
-                                   WidthRequest="120"
-                                   VerticalOptions="Center"/>
-                            <Entry
-                                   x:Name="phoneNumber"
-                                   MinimumWidthRequest="200"
-                                   Placeholder="Enter phone number">
-                                   <Entry.Behaviors>
-                                          <toolkit:MultiValidationBehavior
-                                                 x:Name="phoneValidator"
-                                                 Flags="ValidateOnAttaching, ValidateOnValueChanged">
-                                                 <toolkit:TextValidationBehavior
-                                                        MinimumLength="1"
-                                                        Flags="ValidateOnAttaching, ValidateOnValueChanged"
-                                                        toolkit:MultiValidationBehavior.Error="Phone number is required."/>
-                                                 <toolkit:TextValidationBehavior
-                                                        RegexPattern="^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"
-                                                        Flags="ValidateOnAttaching, ValidateOnValueChanged"
-                                                        toolkit:MultiValidationBehavior.Error="Phone number format is invalid."/>
-                                          </toolkit:MultiValidationBehavior>
-                                   </Entry.Behaviors>
-                            </Entry>
-                     </HorizontalStackLayout>
 
-                     <HorizontalStackLayout Spacing="10"
-                                            Padding="10,2,10,2"
-                                            Grid.Row="1">
-                            <Button x:Name="btnUpdate"
-                                    Text="Update"
-                                    Clicked="OnUpdateButtonClicked"/>
-                            <Button x:Name="btnDelete"
-                                    Text="Delete"
-                                    Clicked="OnDeleteButtonClicked"/>
-                            <Button x:Name="btnCancel"
-                                    Text="Cancel"
-                                    Clicked="OnCancelButtonClicked"/>
-                     </HorizontalStackLayout>
-              </VerticalStackLayout>
+              <Entry
+                     x:Name="phoneNumber"
+                     Grid.Row="4"
+                     Placeholder="Enter phone number">
+                     <Entry.Behaviors>
+                            <toolkit:MultiValidationBehavior
+                                   x:Name="phoneValidator"
+                                   Flags="ValidateOnAttaching, ValidateOnValueChanged">
+                                   <toolkit:TextValidationBehavior
+                                          MinimumLength="1"
+                                          Flags="ValidateOnAttaching, ValidateOnValueChanged"
+                                          toolkit:MultiValidationBehavior.Error="Phone number is required."/>
+                                   <toolkit:TextValidationBehavior
+                                          RegexPattern="^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"
+                                          Flags="ValidateOnAttaching, ValidateOnValueChanged"
+                                          toolkit:MultiValidationBehavior.Error="Phone number format is invalid."/>
+                            </toolkit:MultiValidationBehavior>
+                     </Entry.Behaviors>
+              </Entry>
+
+
+              <HorizontalStackLayout Spacing="10"
+                            Margin="10,20,10,10"
+                            HorizontalOptions="Center"
+                                     Padding="10,2,10,2"
+                                     Grid.Row="5">
+                     <Button x:Name="btnUpdate"
+                             Text="Update"
+                             Clicked="OnUpdateButtonClicked"/>
+                     <Button x:Name="btnCancel"
+                             Text="Cancel"
+                             Clicked="OnCancelButtonClicked"/>
+              </HorizontalStackLayout>
+
        </Grid>
 
 </ContentPage>
