@@ -31,12 +31,7 @@ public partial class EditContactPage : ContentPage
 
 		}
 	}
-
-	public async void OnCancelButtonClicked(object sender, EventArgs args)
-	{
-		await Shell.Current.GoToAsync("..");
-	}
-
+	
 	public void OnUpdateButtonClicked(object sender, EventArgs args)
 	{
 		if(nameValidator.IsNotValid){
